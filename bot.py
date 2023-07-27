@@ -7,7 +7,7 @@ TOKEN = '6138768761:AAFYcz3WSRYloDvHPaTVNEiPX2nRjYsJ-sU'
 API_BASE_URL = 'https://dalink.in/'  # Replace with your AdLinkFly website URL
 
 # Replace 'YOUR_API_ID' and 'YOUR_API_HASH' with the API ID and API hash obtained from Telegram API website
-API_ID = 14505719
+API_ID =14505719
 API_HASH = '620f0a2aa2cd1474a4953619b3e3643d'
 
 # Replace 'YOUR_API_TOKEN' with the API token obtained from your AdLinkFly account settings
@@ -23,8 +23,11 @@ def adlinkfly_api_request(endpoint, params=None):
     response = requests.get(url, headers=headers, params=params)
     return response.json()
 
+# Create the Pyrogram client
+app = Client("my_bot", bot_token=TOKEN, api_id=API_ID, api_hash=API_HASH)
+
 # Start command handler
-@Client.on_message(filters.command("start"))
+@app.on_message(filters.command("start"))
 def start(_, message: Message):
     message.reply_text(
         "Welcome! I am your AdLinkFly account balance bot. "
@@ -32,7 +35,7 @@ def start(_, message: Message):
     )
 
 # /check_balance command handler
-@Client.on_message(filters.command("check_balance"))
+@app.on_message(filters.command("check_balance"))
 def check_balance(_, message: Message):
     user_id = message.from_user.id
 
@@ -44,7 +47,7 @@ def check_balance(_, message: Message):
         message.reply_text("Failed to retrieve account balance. Please try again later.")
 
 # Handler to handle unrecognized commands
-@Client.on_message(~filters.command("start") & ~filters.command("check_balance"))
+@app.on_message(~filters.command("start") & ~filters.command("check_balance"))
 def unknown(_, message: Message):
     message.reply_text("Sorry, I didn't understand that command.")
 
@@ -66,11 +69,7 @@ def get_account_balance(api_token):
         return None
 
 def main():
-    # Create and run the Pyrogram client
-    app = Client("my_bot", bot_token=TOKEN, api_id=API_ID, api_hash=API_HASH)
-    app.add_handler(start)
-    app.add_handler(check_balance)
-    app.add_handler(unknown)
+    # Start the Pyrogram client
     app.run()
 
 if __name__ == '__main__':
