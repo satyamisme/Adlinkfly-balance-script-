@@ -4,7 +4,7 @@ from pyrogram.types import Message
 
 # Replace 'YOUR_BOT_TOKEN' with your actual Telegram bot token
 TOKEN = '6138768761:AAFYcz3WSRYloDvHPaTVNEiPX2nRjYsJ-sU'
-API_BASE_URL = 'https://dalink.in/'  # Replace with your AdLinkFly website URL
+API_BASE_URL = 'https://dalink.in/api/v1/account/balance'  # Replace with your AdLinkFly website URL
 
 # Replace 'YOUR_API_ID' and 'YOUR_API_HASH' with the API ID and API hash obtained from Telegram API website
 API_ID =14505719
