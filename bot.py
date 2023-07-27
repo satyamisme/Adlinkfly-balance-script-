@@ -17,7 +17,7 @@ def adlinkfly_api_request(endpoint, params=None):
     return response.json()
 
 # Start command handler
-@Client.on_message(filters.command(["start"]))
+@Client.on_message(filters.command("start"))
 def start(_, message: Message):
     message.reply_text(
         "Welcome! I am your AdLinkFly account balance bot. "
@@ -25,7 +25,7 @@ def start(_, message: Message):
     )
 
 # /check_balance command handler
-@Client.on_message(filters.command(["check_balance"]))
+@Client.on_message(filters.command("check_balance"))
 def check_balance(_, message: Message):
     user_id = message.from_user.id
 
@@ -36,7 +36,7 @@ def check_balance(_, message: Message):
     message.reply_text(f"Your account balance: {balance} credits.")
 
 # Handler to handle unrecognized commands
-@Client.on_message(~filters.command)
+@Client.on_message(~filters.command("start") & ~filters.command("check_balance"))
 def unknown(_, message: Message):
     message.reply_text("Sorry, I didn't understand that command.")
 
