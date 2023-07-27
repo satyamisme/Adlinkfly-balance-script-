@@ -32,7 +32,29 @@ def start(_, message: Message):
 @Client.on_message(filters.command("check_balance"))
 def check_balance(_, message: Message):
     user_id = message.from_user.id
+def get_account_balance(api_token):
+    endpoint = '/api/v1/account/balance'
+    url = API_BASE_URL + endpoint
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': api_token,
+    }
+    
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        return data['balance']
+    else:
+        print(f"Failed to retrieve account balance. Status code: {response.status_code}")
+        return None
 
+def main():
+    # Get account balance
+    account_balance = get_account_balance(API_TOKEN)
+    if account_balance is not None:
+        print(f"Your account balance: {account_balance} credits.")
+    else:
+        print("Failed to retrieve account balance. Please check your API token and URL.")
     # Here you can implement logic to retrieve the account balance from AdLinkFly API.
     # For this example, let's assume the balance is 100.
     balance = 100
