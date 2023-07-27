@@ -1,13 +1,10 @@
 import requests
-from telegram import Update, ReplyKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackContext
+from pyrogram import Client, filters
+from pyrogram.types import Message
 
 # Replace 'YOUR_BOT_TOKEN' with your actual Telegram bot token
 TOKEN = '6138768761:AAFYcz3WSRYloDvHPaTVNEiPX2nRjYsJ-sU'
 API_BASE_URL = 'https://dalink.in/'  # Replace with your AdLinkFly website URL
-
-# Telegram bot conversation states
-CHECK_BALANCE = 1
 
 # Helper function to make API requests to AdLinkFly
 def adlinkfly_api_request(endpoint, params=None):
@@ -19,39 +16,38 @@ def adlinkfly_api_request(endpoint, params=None):
     response = requests.get(url, headers=headers, params=params)
     return response.json()
 
-# /start command handler
-def check_balance(update: Update, context: CallbackContext):
-    update.message.reply_text(
+# Start command handler
+@Client.on_message(filters.command(["start"]))
+def start(_, message: Message):
+    message.reply_text(
         "Welcome! I am your AdLinkFly account balance bot. "
         "Use /check_balance to see your account balance."
     )
 
 # /check_balance command handler
-def check_balance(update: Update, _: CallbackContext):
-    user_id = update.effective_user.id
+@Client.on_message(filters.command(["check_balance"]))
+def check_balance(_, message: Message):
+    user_id = message.from_user.id
+
     # Here you can implement logic to retrieve the account balance from AdLinkFly API.
     # For this example, let's assume the balance is 100.
     balance = 100
 
-    update.message.reply_text(f"Your account balance: {balance} credits.")
+    message.reply_text(f"Your account balance: {balance} credits.")
 
 # Handler to handle unrecognized commands
-def unknown(update: Update, _: CallbackContext):
-    update.message.reply_text("Sorry, I didn't understand that command.")
+@Client.on_message(~filters.command)
+def unknown(_, message: Message):
+    message.reply_text("Sorry, I didn't understand that command.")
 
 def main():
-    updater = Updater(TOKEN)
-
-    dp = updater.dispatcher
-
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("check_balance", check_balance))
-
-    # Handler for unrecognized commands
-    dp.add_handler(MessageHandler(Filters.command, unknown))
-
-    updater.start_polling()
-    updater.idle()
+    # Create and run the Pyrogram client
+    app = Client("my_bot", bot_token=TOKEN)
+    app.add_handler(start)
+    app.add_handler(check_balance)
+    app.add_handler(unknown)
+    app.run()
 
 if __name__ == '__main__':
     main()
+    
