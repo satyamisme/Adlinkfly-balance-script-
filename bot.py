@@ -1,6 +1,6 @@
 import requests
-from telegram import Update, ReplyKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackContext
+from telegram import Update, ReplyKeyboardMarkup, Filter
+from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, CallbackContext
 
 # Replace 'YOUR_BOT_TOKEN' with your actual Telegram bot token
 TOKEN = '6138768761:AAFYcz3WSRYloDvHPaTVNEiPX2nRjYsJ-sU'
@@ -20,7 +20,7 @@ def adlinkfly_api_request(endpoint, params=None):
     return response.json()
 
 # /start command handler
-def start(update: Update, _: CallbackContext):
+def check_balance(update: Update, context: CallbackContext):
     update.message.reply_text(
         "Welcome! I am your AdLinkFly account balance bot. "
         "Use /check_balance to see your account balance."
