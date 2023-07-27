@@ -6,6 +6,10 @@ from pyrogram.types import Message
 TOKEN = '6138768761:AAFYcz3WSRYloDvHPaTVNEiPX2nRjYsJ-sU'
 API_BASE_URL = 'https://dalink.in/'  # Replace with your AdLinkFly website URL
 
+# Replace 'YOUR_API_ID' and 'YOUR_API_HASH' with the API ID and API hash obtained from Telegram API website
+API_ID = '14505719'
+API_HASH = '620f0a2aa2cd1474a4953619b3e3643d'
+
 # Helper function to make API requests to AdLinkFly
 def adlinkfly_api_request(endpoint, params=None):
     url = API_BASE_URL + endpoint
@@ -42,7 +46,7 @@ def unknown(_, message: Message):
 
 def main():
     # Create and run the Pyrogram client
-    app = Client("my_bot", bot_token=TOKEN)
+    app = Client("my_bot", bot_token=TOKEN, api_id=API_ID, api_hash=API_HASH)
     app.add_handler(start)
     app.add_handler(check_balance)
     app.add_handler(unknown)
@@ -50,4 +54,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
